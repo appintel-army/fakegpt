@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Generate Image</title>
+  </head>
+  <body>
+    <h1>Generate Image</h1>
+    <form>
+      <label for="que">Question:</label><br>
+      <input type="text" id="que" name="que"><br><br>
+      <label for="ans">Answer:</label><br>
+      <input type="text" id="ans" name="ans"><br><br>
+      <button type="button" onclick="generateImage()">Generate</button>
+    </form>
+    <script>
+      function generateImage() {
+        // Get the values of the question and answer inputs
+        const que = document.getElementById('que').value;
+        const ans = document.getElementById('ans').value;
+        
+        // Make a request to the Flask API to generate the image
+        fetch('http://localhost:5000/generate_image', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({que: que, ans: ans})
+  })
+  .then(response => response.blob())
+  .then(blob => {
+    // Create a URL for the image blob
+    const url = URL.createObjectURL(blob);
+      
+    // Create a new image element with the generated image
+    const img = document.createElement('img');
+    img.src = url;
+            
+            // Add the image element to the page
+            document.body.appendChild(img);
+          });
+      }
+    </script>
+  </body>
+</html>
